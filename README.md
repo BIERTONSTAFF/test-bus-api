@@ -94,7 +94,12 @@ PUT http://localhost:8000/api/routes
     "direction": 0
 }
 ```
-
+Response:
+```json
+{
+    "message": "Маршрут обновлен"
+}
+```
 # Docker
 
 Cборка:
