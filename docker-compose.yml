@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: testbusapi
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+    networks:
+      - testbusapi
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=testbusapi
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=12345678
+    depends_on:
+      - db
+    command: /init.sh
+
+  db:
+    image: postgres
+    container_name: testbusapi-db
+    restart: always
+    networks:
+      - testbusapi
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DB=testbusapi
+    volumes:
+      - testbusapi_db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  testbusapi_db_data:
+
+networks:
+  testbusapi:
+    driver: bridge
